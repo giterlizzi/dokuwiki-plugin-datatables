@@ -7,4 +7,6 @@
  */
  
 // for the configuration manager
-$lang['excludedPages'] = 'Excluded pages (insert a regex)';
+$lang['excludedPages']      = 'Excluded pages (insert a regex)';
+$lang['enableForAllTables'] = 'Enable DataTables for all "well formatted" tables';
+$lang['enableLocalization'] = 'Enable automatic localization';

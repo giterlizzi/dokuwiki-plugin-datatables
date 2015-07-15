@@ -54,10 +54,10 @@ class syntax_plugin_datatables extends DokuWiki_Syntax_Plugin {
             $xml = simplexml_load_string(str_replace('>', '/>', $match));
 
             foreach ($xml->attributes() as $key => $value) {
-              $html5_data[] = "data-$key=" . (string) $value;
+              $html5_data[] = sprintf('data-%s="%s"', $key, (string) $value);
             }
 
-            $renderer->doc .= '<div class="dt-wrapper" '. implode(' ', $html5_data) .'>';
+            $renderer->doc .= sprintf('<div class="dt-wrapper" %s>', implode(' ', $html5_data));
             return true;
 
           case DOKU_LEXER_EXIT:

@@ -34,22 +34,39 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
     public function datatables(Doku_Event &$event, $param) {
 
         global $ID;
+        global $conf;
 
         if ((bool) preg_match_all('/'.$this->getConf('excludedPages').'/', $ID)) {
           return false;
         }
 
+        $base_url  = DOKU_BASE. 'lib/plugins/datatables/assets/datatables';
+
+        $datatables_lang   = sprintf('%s/datatables/assets/datatables/plugins/i18n/%s.lang', rtrim(DOKU_PLUGIN, '/'), $conf['lang']);
+        $datatables_config = array();
+
+        $datatables_config['enableForAllTables'] = $this->getConf('enableForAllTables');
+
         $event->data['script'][] = array (
           'type' => 'text/javascript',
-          'src'  => '//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js',
+          'src'  => "$base_url/js/jquery.dataTables.min.js",
         );
 
         $event->data['link'][] = array (
           'type' => 'text/css',
           'rel'  => 'stylesheet',
-          'href' => '//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css',
+          'href' => "$base_url/css/jquery.dataTables.min.css",
         );
 
+        if (file_exists($datatables_lang) && $this->getConf('enableLocalization')) {
+          $datatables_config['language'] = json_decode(preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '',
+                                                       file_get_contents($datatables_lang)));
+        }
+  
+        $event->data['script'][] = array (
+          'type'  => 'text/javascript',
+          '_data' => sprintf('if (typeof window.DATATABLES_CONFIG === "undefined") { window.DATATABLES_CONFIG = {}; } window.DATATABLES_CONFIG = %s;', json_encode($datatables_config))
+        );
 
         //$event->data['script'][] = array (
         //  'type' => 'text/javascript',
