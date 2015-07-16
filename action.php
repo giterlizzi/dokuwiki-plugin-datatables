@@ -16,7 +16,7 @@ if(!defined('DOKU_INC')) die();
  * Add DataTables support to DokuWiki
  */
 class action_plugin_datatables extends DokuWiki_Action_Plugin {
- 
+
     /**
      * Register events
      *
@@ -25,7 +25,7 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
     public function register(Doku_Event_Handler $controller) {
       $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'datatables');
     }
- 
+
     /**
      * Add DataTables scripts and styles
      *
@@ -40,9 +40,10 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
           return false;
         }
 
-        $base_url  = DOKU_BASE. 'lib/plugins/datatables/assets/datatables';
+        $base_path = dirname(__FILE__) . '/assets/datatables';
+        $base_url  = DOKU_BASE . 'lib/plugins/datatables/assets/datatables';
 
-        $datatables_lang   = sprintf('%s/datatables/assets/datatables/plugins/i18n/%s.lang', rtrim(DOKU_PLUGIN, '/'), $conf['lang']);
+        $datatables_lang   = sprintf('%s/plugins/i18n/%s.lang', $base_path, $conf['lang']);
         $datatables_config = array();
 
         $datatables_config['enableForAllTables'] = $this->getConf('enableForAllTables');
@@ -62,7 +63,7 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
           $datatables_config['language'] = json_decode(preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '',
                                                        file_get_contents($datatables_lang)));
         }
-  
+
         $event->data['script'][] = array (
           'type'  => 'text/javascript',
           '_data' => sprintf('if (typeof window.DATATABLES_CONFIG === "undefined") { window.DATATABLES_CONFIG = {}; } window.DATATABLES_CONFIG = %s;', json_encode($datatables_config))
@@ -82,4 +83,3 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
     }
 
 }
-

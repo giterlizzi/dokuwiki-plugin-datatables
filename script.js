@@ -8,26 +8,41 @@
 
 jQuery(document).ready(function() {
 
+
 if (typeof window.DATATABLES_CONFIG === 'undefined') {
   window.DATATABLES_CONFIG = {};
 }
 
-var $all_tables  = jQuery('.mode_show table thead'),
-    $wrap_tables = jQuery('.mode_show div.dt-wrapper table thead');
+var WRAP_TABLES_SELECTOR = '.mode_show #dokuwiki__content div.dt-wrapper table thead',
+    ALL_TABLES_SELECTOR  = '.mode_show #dokuwiki__content table thead';
 
-if (DATATABLES_CONFIG.enableForAllTables && $all_tables.length) {
+var $wrap_tables = jQuery(WRAP_TABLES_SELECTOR);
 
-  $all_tables.each(function() {
 
-    var $target_table = jQuery(this);
+function init_datatables($target_table, dt_config) {
+console.debug($target_table);
+  // Exclude all tables with {row,col}span
+  if (! $target_table.find('[rowspan], [colspan]').length) {
+    $target_table.DataTable(dt_config);
+  }
+
+}
+
+
+if (DATATABLES_CONFIG.enableForAllTables) {
+
+  jQuery(ALL_TABLES_SELECTOR).each(function() {
+
+    var $target_table = jQuery(this).parent();
 
     if (! $target_table.parents('.dt-wrapper').length) {
-      $target_table.parent().DataTable(DATATABLES_CONFIG);
+      init_datatables($target_table, DATATABLES_CONFIG);
     }
 
   });
 
 }
+
 
 if ($wrap_tables.length) {
 
@@ -37,10 +52,11 @@ if ($wrap_tables.length) {
         wrap_config   = jQuery(this).parents('.dt-wrapper').data(),
         dt_config     = jQuery.extend(DATATABLES_CONFIG, wrap_config);
 
-    $target_table.DataTable(dt_config);
+    init_datatables($target_table, dt_config);
 
   });
 
 }
+
 
 });
