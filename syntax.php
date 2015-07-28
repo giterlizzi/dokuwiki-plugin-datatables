@@ -18,11 +18,11 @@ class syntax_plugin_datatables extends DokuWiki_Syntax_Plugin {
     function getSort(){ return 195; }
 
     function connectTo($mode) {
-      $this->Lexer->addEntryPattern('<(?:DATATABLES|datatables).*?>(?=.*?</(?:DATATABLES|datatables)>)', $mode, 'plugin_datatables');
+      $this->Lexer->addEntryPattern('<(?:DATATABLES|datatables|datatable).*?>(?=.*?</(?:DATATABLES|datatables|datatable)>)', $mode, 'plugin_datatables');
     }
 
     public function postConnect() {
-      $this->Lexer->addExitPattern('</(?:DATATABLES|datatables)>', 'plugin_datatables');
+      $this->Lexer->addExitPattern('</(?:DATATABLES|datatables|datatable)>', 'plugin_datatables');
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {

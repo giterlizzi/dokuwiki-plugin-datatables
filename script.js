@@ -20,7 +20,7 @@ var $wrap_tables = jQuery(WRAP_TABLES_SELECTOR);
 
 
 function init_datatables($target_table, dt_config) {
-console.debug($target_table);
+
   // Exclude all tables with {row,col}span
   if (! $target_table.find('[rowspan], [colspan]').length) {
     $target_table.DataTable(dt_config);
