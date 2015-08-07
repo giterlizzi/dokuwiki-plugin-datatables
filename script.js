@@ -13,8 +13,8 @@ if (typeof window.DATATABLES_CONFIG === 'undefined') {
   window.DATATABLES_CONFIG = {};
 }
 
-var WRAP_TABLES_SELECTOR = '.mode_show #dokuwiki__content div.dt-wrapper table thead',
-    ALL_TABLES_SELECTOR  = '.mode_show #dokuwiki__content table thead';
+var WRAP_TABLES_SELECTOR = '#dokuwiki__content div.dt-wrapper table thead',
+    ALL_TABLES_SELECTOR  = '#dokuwiki__content table thead';
 
 var $wrap_tables = jQuery(WRAP_TABLES_SELECTOR);
 
@@ -24,6 +24,23 @@ function init_datatables($target_table, dt_config) {
   // Exclude all tables with {row,col}span
   if (! $target_table.find('[rowspan], [colspan]').length) {
     $target_table.DataTable(dt_config);
+  }
+
+  var data = $target_table.parents('.dt-wrapper').data();
+
+  if (data.fixedHeaderEnable) {
+
+    var options = {};
+
+    jQuery.each(data, function(key, value) {
+      switch (key) {
+        case 'fixedHeaderOffsetTop':
+          options['offsetTop'] = value;
+      }
+    });
+
+    new jQuery.fn.dataTable.FixedHeader($target_table, options);
+
   }
 
 }

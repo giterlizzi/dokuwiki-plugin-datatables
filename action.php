@@ -69,16 +69,16 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
           '_data' => sprintf('if (typeof window.DATATABLES_CONFIG === "undefined") { window.DATATABLES_CONFIG = {}; } window.DATATABLES_CONFIG = %s;', json_encode($datatables_config))
         );
 
-        //$event->data['script'][] = array (
-        //  'type' => 'text/javascript',
-        //  'src'  => '//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js',
-        //);
-        //
-        //$event->data['link'][] = array (
-        //  'type' => 'text/css',
-        //  'rel'  => 'stylesheet',
-        //  'href' => '//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css',
-        //);
+        $event->data['script'][] = array (
+          'type' => 'text/javascript',
+          'src'  => "$base_url/extensions/FixedHeader/js/dataTables.fixedHeader.min.js",
+        );
+
+        $event->data['link'][] = array (
+          'type' => 'text/css',
+          'rel'  => 'stylesheet',
+          'href' => "$base_url/extensions/FixedHeader/css/dataTables.fixedHeader.min.css",
+        );
 
     }
 
