@@ -13,16 +13,17 @@ if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 class syntax_plugin_datatables extends DokuWiki_Syntax_Plugin {
 
     function getType(){ return 'container';}
-    function getAllowedTypes() { return array('container'); }
+    // Added susbstition allowed type, so that Doku renders tables from other plugins, then DataTable can be applied on them.
+    function getAllowedTypes() { return array('container', 'substition'); }
     function getPType(){ return 'block';}
     function getSort(){ return 195; }
 
     function connectTo($mode) {
-      $this->Lexer->addEntryPattern('<(?:DATATABLES|datatables|datatable).*?>(?=.*?</(?:DATATABLES|datatables|datatable)>)', $mode, 'plugin_datatables');
+      $this->Lexer->addEntryPattern('<(?:DATATABLES?|datatables?)\b.*?>(?=.*?</(?:DATATABLES?|datatables?)>)', $mode, 'plugin_datatables');
     }
 
     public function postConnect() {
-      $this->Lexer->addExitPattern('</(?:DATATABLES|datatables|datatable)>', 'plugin_datatables');
+      $this->Lexer->addExitPattern('</(?:DATATABLES?|datatables?)>', 'plugin_datatables');
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {
