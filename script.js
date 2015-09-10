@@ -13,7 +13,9 @@ if (typeof window.DATATABLES_CONFIG === 'undefined') {
   window.DATATABLES_CONFIG = {};
 }
 
-var WRAP_TABLES_SELECTOR = '#dokuwiki__content div.dt-wrapper table thead',
+// Give a chance to create header on individual tables by not looking for thead for now.
+var WRAP_TABLES_SELECTOR = '#dokuwiki__content div.dt-wrapper table',
+    // The all-tables option still requires proper thead already set.
     ALL_TABLES_SELECTOR  = '#dokuwiki__content table thead';
 
 var $wrap_tables = jQuery(WRAP_TABLES_SELECTOR);
@@ -23,16 +25,39 @@ function init_datatables($target_table, dt_config) {
 
   // Exclude all tables with {row,col}span
   if (! $target_table.find('[rowspan], [colspan]').length) {
-    $target_table.DataTable(dt_config);
+    
+    var headerRows = dt_config.headerRows;
+    if (headerRows) {
+      // Retrieve any already existing thead.
+      var $thead = jQuery('thead', $target_table),
+          $tbody = jQuery('tbody', $target_table),
+          missingThead = $thead.size() === 0;
+      headerRows -= $thead.children().size();
+      if (missingThead) {
+        $thead = jQuery('<thead>');
+      }
+      while(headerRows > 0) {
+        headerRows--;
+        $thead.append($tbody.children().first());
+      }
+      if (missingThead) {
+        $target_table.prepend($thead);
+      }
+    }
+    
+    // Make sure the table has a thead with at least 1 row.
+    if (jQuery('thead', $target_table).children().size()) {
+      // Launch DataTable.
+      $target_table.DataTable(dt_config);
+    }
   }
 
-  var data = $target_table.parents('.dt-wrapper').data();
-
-  if (data.fixedHeaderEnable) {
+  // Config is already available in dt_config parameter.
+  if (dt_config.fixedHeaderEnable) {
 
     var options = {};
 
-    jQuery.each(data, function(key, value) {
+    jQuery.each(dt_config, function(key, value) {
       switch (key) {
         case 'fixedHeaderOffsetTop':
           options['offsetTop'] = value;
@@ -65,9 +90,10 @@ if ($wrap_tables.length) {
 
   $wrap_tables.each(function() {
 
-    var $target_table = jQuery(this).parent(),
+    var $target_table = jQuery(this), // We are already on the table (no longer on thead).
         wrap_config   = jQuery(this).parents('.dt-wrapper').data(),
-        dt_config     = jQuery.extend(DATATABLES_CONFIG, wrap_config);
+        // General config should be 2nd object in order not to be modified.
+        dt_config     = jQuery.extend(wrap_config, DATATABLES_CONFIG);
 
     init_datatables($target_table, dt_config);
 
