@@ -46,7 +46,7 @@ function init_datatables($target_table, dt_config) {
     }
     
     // Make sure the table has a thead with at least 1 row.
-    if (jQuery('thead', $target_table).children().size()) {
+    if (jQuery('thead > tr', $target_table).size()) {
       // Launch DataTable.
       $target_table.DataTable(dt_config);
     }
