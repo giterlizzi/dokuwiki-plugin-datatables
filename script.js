@@ -22,52 +22,48 @@ var $wrap_tables = jQuery(WRAP_TABLES_SELECTOR);
 
 
 function init_datatables($target_table, dt_config) {
-
-  // Exclude all tables with {row,col}span
-  if (! $target_table.find('[rowspan], [colspan]').length) {
-    
-    var headerRows = dt_config.headerRows;
-    if (headerRows) {
-      // Retrieve any already existing thead.
-      var $thead = jQuery('thead', $target_table),
-          $tbody = jQuery('tbody', $target_table),
-          missingThead = $thead.size() === 0;
-      headerRows -= $thead.children().size();
-      if (missingThead) {
-        $thead = jQuery('<thead>');
-      }
-      while(headerRows > 0) {
-        headerRows--;
-        $thead.append($tbody.children().first());
-      }
-      if (missingThead) {
-        $target_table.prepend($thead);
-      }
+  // Build the thead if requested, before checking for thead existence and absence of (col|row)span in tbody.
+  var headerRows = dt_config.headerRows;
+  if (headerRows) {
+    // Retrieve any already existing thead.
+    var $thead = jQuery('thead', $target_table),
+        $tbody = jQuery('tbody', $target_table),
+        missingThead = $thead.size() === 0;
+    headerRows -= $thead.children().size();
+    if (missingThead) {
+      $thead = jQuery('<thead>');
     }
-    
-    // Make sure the table has a thead with at least 1 row.
-    if (jQuery('thead > tr', $target_table).size()) {
-      // Launch DataTable.
-      $target_table.DataTable(dt_config);
+    while(headerRows > 0) {
+      headerRows--;
+      $thead.append($tbody.children().first());
+    }
+    if (missingThead) {
+      $target_table.prepend($thead);
     }
   }
+  
+  // Make sure the table has a thead with at least 1 row and that no (col|row)span is used in tbody, because DataTables does not support this.
+  if (jQuery('thead > tr', $target_table).size() && !jQuery('tbody', $target_table).find('[rowspan], [colspan]').length) {
+    // Launch DataTable.
+    $target_table.DataTable(dt_config);
+    
+    // Config is already available in dt_config parameter.
+    // Moved creation of fixed header inside the conditional block, so that it happens only if the table is converted into a DataTable.
+    if (dt_config.fixedHeaderEnable) {
 
-  // Config is already available in dt_config parameter.
-  if (dt_config.fixedHeaderEnable) {
+      var options = {};
 
-    var options = {};
+      jQuery.each(dt_config, function(key, value) {
+        switch (key) {
+          case 'fixedHeaderOffsetTop':
+            options['offsetTop'] = value;
+        }
+      });
 
-    jQuery.each(dt_config, function(key, value) {
-      switch (key) {
-        case 'fixedHeaderOffsetTop':
-          options['offsetTop'] = value;
-      }
-    });
+      new jQuery.fn.dataTable.FixedHeader($target_table, options);
 
-    new jQuery.fn.dataTable.FixedHeader($target_table, options);
-
+    }
   }
-
 }
 
 
