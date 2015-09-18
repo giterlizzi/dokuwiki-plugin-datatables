@@ -1,7 +1,7 @@
 base datatables
 author Giuseppe Di Terlizzi
 email giuseppe.diterlizzi@gmail.com
-date 2015-08-07
+date 2015-09-18
 name DataTables Plugin
 desc Add DataTables support to DokuWiki
 url http://www.dokuwiki.org/plugin:datatables
