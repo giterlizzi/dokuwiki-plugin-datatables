@@ -55,7 +55,7 @@ class syntax_plugin_datatables extends DokuWiki_Syntax_Plugin {
             $xml = simplexml_load_string(str_replace('>', '/>', $match));
 
             foreach ($xml->attributes() as $key => $value) {
-              $html5_data[] = sprintf('data-%s="%s"', $key, (string) $value);
+              $html5_data[] = sprintf("data-%s='%s'", $key, str_replace("'", "&apos;", (string) $value));
             }
 
             $renderer->doc .= sprintf('<div class="dt-wrapper" %s>', implode(' ', $html5_data));
