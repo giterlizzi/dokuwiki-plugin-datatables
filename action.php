@@ -36,7 +36,7 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
         global $ID;
         global $conf;
 
-        if ((bool) preg_match_all('/'.$this->getConf('excludedPages').'/', $ID)) {
+        if ((bool) preg_match('/'.$this->getConf('excludedPages').'/', $ID)) {
           return false;
         }
 
