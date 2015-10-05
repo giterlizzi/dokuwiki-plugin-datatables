@@ -13,16 +13,17 @@ if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 class syntax_plugin_datatables extends DokuWiki_Syntax_Plugin {
 
     function getType(){ return 'container';}
-    function getAllowedTypes() { return array('container'); }
+    // Added susbstition allowed type, so that Doku renders tables from other plugins, then DataTable can be applied on them.
+    function getAllowedTypes() { return array('container', 'substition'); }
     function getPType(){ return 'block';}
     function getSort(){ return 195; }
 
     function connectTo($mode) {
-      $this->Lexer->addEntryPattern('<(?:DATATABLES|datatables|datatable).*?>(?=.*?</(?:DATATABLES|datatables|datatable)>)', $mode, 'plugin_datatables');
+      $this->Lexer->addEntryPattern('<(?:DATATABLES?|datatables?)\b.*?>(?=.*?</(?:DATATABLES?|datatables?)>)', $mode, 'plugin_datatables');
     }
 
     public function postConnect() {
-      $this->Lexer->addExitPattern('</(?:DATATABLES|datatables|datatable)>', 'plugin_datatables');
+      $this->Lexer->addExitPattern('</(?:DATATABLES?|datatables?)>', 'plugin_datatables');
     }
 
     function handle($match, $state, $pos, Doku_Handler $handler) {
@@ -54,7 +55,7 @@ class syntax_plugin_datatables extends DokuWiki_Syntax_Plugin {
             $xml = simplexml_load_string(str_replace('>', '/>', $match));
 
             foreach ($xml->attributes() as $key => $value) {
-              $html5_data[] = sprintf('data-%s="%s"', $key, (string) $value);
+              $html5_data[] = sprintf("data-%s='%s'", $key, str_replace("'", "&apos;", (string) $value));
             }
 
             $renderer->doc .= sprintf('<div class="dt-wrapper" %s>', implode(' ', $html5_data));
