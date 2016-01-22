@@ -1,10 +1,10 @@
 <?php
 /**
  * DataTables Action Plugin
- * 
+ *
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author     Giuseppe Di Terlizzi <giuseppe.diterlizzi@gmail.com>
- * @copyright  (C) 2015, Giuseppe Di Terlizzi
+ * @copyright  (C) 2015-2016, Giuseppe Di Terlizzi
  */
 
 // must be run within Dokuwiki
@@ -24,6 +24,28 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
      */
     public function register(Doku_Event_Handler $controller) {
       $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'datatables');
+      $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, 'jsinfo');
+    }
+
+
+    public function jsinfo(Doku_Event &$event, $param) {
+
+      global $JSINFO;
+
+      $datatables_config = array();
+      $datatables_config['enableForAllTables'] = $this->getConf('enableForAllTables');
+
+      $asset_path = dirname(__FILE__) . '/assets/datatables';
+
+      $datatables_lang = sprintf('%s/plugins/i18n/%s.lang', $asset_path, $conf['lang']);
+
+      if (file_exists($datatables_lang) && $this->getConf('enableLocalization')) {
+        $datatables_config['language'] = json_decode(preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '',
+                                                     file_get_contents($datatables_lang)));
+      }
+
+      $JSINFO['plugin']['datatables'] = $datatables_config;
+
     }
 
     /**
@@ -35,6 +57,7 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
 
         global $ID;
         global $conf;
+        global $JSINFO;
 
         if ((bool) preg_match('/'.$this->getConf('excludedPages').'/', $ID)) {
           return false;
@@ -42,11 +65,6 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
 
         $base_path = dirname(__FILE__) . '/assets/datatables';
         $base_url  = DOKU_BASE . 'lib/plugins/datatables/assets/datatables';
-
-        $datatables_lang   = sprintf('%s/plugins/i18n/%s.lang', $base_path, $conf['lang']);
-        $datatables_config = array();
-
-        $datatables_config['enableForAllTables'] = $this->getConf('enableForAllTables');
 
         $event->data['script'][] = array (
           'type' => 'text/javascript',
@@ -57,16 +75,6 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
           'type' => 'text/css',
           'rel'  => 'stylesheet',
           'href' => "$base_url/css/jquery.dataTables.min.css",
-        );
-
-        if (file_exists($datatables_lang) && $this->getConf('enableLocalization')) {
-          $datatables_config['language'] = json_decode(preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '',
-                                                       file_get_contents($datatables_lang)));
-        }
-
-        $event->data['script'][] = array (
-          'type'  => 'text/javascript',
-          '_data' => sprintf('if (typeof window.DATATABLES_CONFIG === "undefined") { window.DATATABLES_CONFIG = {}; } window.DATATABLES_CONFIG = %s;', json_encode($datatables_config))
         );
 
         $event->data['script'][] = array (
