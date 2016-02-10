@@ -31,6 +31,7 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
     public function jsinfo(Doku_Event &$event, $param) {
 
       global $JSINFO;
+      global $conf;
 
       $datatables_config = array();
       $datatables_config['enableForAllTables'] = $this->getConf('enableForAllTables');
