@@ -41,7 +41,7 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
       $datatables_lang = sprintf('%s/plugins/i18n/%s.lang', $asset_path, $conf['lang']);
 
       if (file_exists($datatables_lang) && $this->getConf('enableLocalization')) {
-        $datatables_config['language'] = json_decode(preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '',
+        $datatables_config['default']['language'] = json_decode(preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '',
                                                      file_get_contents($datatables_lang)));
       }
 
@@ -69,27 +69,60 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
         $base_path = dirname(__FILE__) . '/assets/datatables';
         $base_url  = DOKU_BASE . 'lib/plugins/datatables/assets/datatables';
 
-        $event->data['script'][] = array (
-          'type' => 'text/javascript',
-          'src'  => "$base_url/js/jquery.dataTables.min.js",
-        );
+        $dt_scripts[] = "$base_url/media/js/jquery.dataTables.min.js";
 
-        $event->data['link'][] = array (
-          'type' => 'text/css',
-          'rel'  => 'stylesheet',
-          'href' => "$base_url/css/jquery.dataTables.min.css",
-        );
+        $dt_scripts[] = "$base_url/extensions/FixedHeader/js/dataTables.fixedHeader.min.js";
+        $dt_scripts[] = "$base_url/extensions/FixedColumns/js/dataTables.fixedColumns.min.js";
 
-        $event->data['script'][] = array (
-          'type' => 'text/javascript',
-          'src'  => "$base_url/extensions/FixedHeader/js/dataTables.fixedHeader.min.js",
-        );
+        $dt_scripts[] = "$base_url/extensions/Buttons/js/dataTables.buttons.min.js";
+        $dt_scripts[] = "$base_url/extensions/Buttons/js/buttons.html5.min.js";
+        $dt_scripts[] = "$base_url/extensions/Buttons/js/buttons.print.min.js";
 
-        $event->data['link'][] = array (
-          'type' => 'text/css',
-          'rel'  => 'stylesheet',
-          'href' => "$base_url/extensions/FixedHeader/css/dataTables.fixedHeader.min.css",
-        );
+        $dt_scripts[] = "$base_url/extensions/Responsive/js/dataTables.responsive.min.js";
+
+
+        switch($conf['template']) {
+
+          case 'bootstrap3':
+
+            $dt_scripts[] = "$base_url/media/js/dataTables.bootstrap.min.js";
+            $dt_styles[]  = "$base_url/media/css/dataTables.bootstrap.min.css";
+
+            $dt_styles[]  = "$base_url/extensions/FixedHeader/css/fixedHeader.bootstrap.min.css";
+            $dt_styles[]  = "$base_url/extensions/FixedColumns/css/fixedColumns.bootstrap.min.css";
+
+            $dt_scripts[] = "$base_url/extensions/Buttons/js/buttons.bootstrap.min.js";
+            $dt_styles[]  = "$base_url/extensions/Buttons/css/buttons.bootstrap.min.css";
+
+            $dt_scripts[] = "$base_url/extensions/Responsive/js/responsive.bootstrap.min.js";
+            $dt_styles[]  = "$base_url/extensions/Responsive/css/responsive.bootstrap.min.css";
+
+            break;
+
+          default:
+
+            $dt_styles[] = "$base_url/media/css/jquery.dataTables.min.css";
+            $dt_styles[] = "$base_url/extensions/FixedHeader/css/fixedHeader.dataTables.min.css";
+            $dt_styles[] = "$base_url/extensions/FixedColumns/css/fixedColumns.dataTables.min.css";
+            $dt_styles[] = "$base_url/extensions/Buttons/css/buttons.dataTables.min.css";
+            $dt_styles[] = "$base_url/extensions/Responsive/css/dataTables.responsive.min.css";
+
+        }
+
+        foreach ($dt_scripts as $script) {
+          $event->data['script'][] = array (
+            'type' => 'text/javascript',
+            'src'  => $script,
+          );
+        }
+
+        foreach ($dt_styles as $style) {
+          $event->data['link'][] = array (
+            'type' => 'text/css',
+            'rel'  => 'stylesheet',
+            'href' => $style,
+          );
+        }
 
     }
 
