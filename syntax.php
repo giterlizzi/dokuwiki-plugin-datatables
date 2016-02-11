@@ -61,7 +61,7 @@ class syntax_plugin_datatables extends DokuWiki_Syntax_Plugin {
           global $ACT;
   
           if ($ACT == 'preview') {
-            msg(sprintf('<strong>DataTable Plugin</strong> - Malformed tag (%s). Please check your code!', hsc($match)), -1);
+            msg(sprintf('<strong>DataTable Plugin</strong> - Malformed tag (<code>%s</code>). Please check your code!', hsc($match)), -1);
           }
 
         }
