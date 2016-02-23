@@ -105,7 +105,7 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
             $dt_styles[] = "$base_url/extensions/FixedHeader/css/fixedHeader.dataTables.min.css";
             $dt_styles[] = "$base_url/extensions/FixedColumns/css/fixedColumns.dataTables.min.css";
             $dt_styles[] = "$base_url/extensions/Buttons/css/buttons.dataTables.min.css";
-            $dt_styles[] = "$base_url/extensions/Responsive/css/dataTables.responsive.min.css";
+            $dt_styles[] = "$base_url/extensions/Responsive/css/responsive.dataTables.min.css";
 
         }
 
