@@ -9,8 +9,8 @@
 
 jQuery(document).ready(function() {
 
-var WRAP_TABLES_SELECTOR = '#dokuwiki__content div.dt-wrapper table',
-    ALL_TABLES_SELECTOR  = '#dokuwiki__content table thead';
+var WRAP_TABLES_SELECTOR = '.page div.dt-wrapper table',
+    ALL_TABLES_SELECTOR  = '.page table thead';
 
 var $wrap_tables = jQuery(WRAP_TABLES_SELECTOR);
 
