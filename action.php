@@ -34,6 +34,11 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
       global $conf;
 
       $datatables_config = array();
+
+      // DataTables global configuration
+      $datatables_config['config'] = array();
+
+      // Plugin configuration
       $datatables_config['enableForAllTables'] = $this->getConf('enableForAllTables');
 
       $asset_path = dirname(__FILE__) . '/assets/datatables';
@@ -41,7 +46,7 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin {
       $datatables_lang = sprintf('%s/plugins/i18n/%s.lang', $asset_path, $conf['lang']);
 
       if (file_exists($datatables_lang) && $this->getConf('enableLocalization')) {
-        $datatables_config['default']['language'] = json_decode(preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '',
+        $datatables_config['config']['language'] = json_decode(preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t]//.*)|(^//.*)#", '',
                                                      file_get_contents($datatables_lang)));
       }
 
