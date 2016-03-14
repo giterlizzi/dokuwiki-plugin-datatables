@@ -41,38 +41,43 @@ function init_datatables($target_table, dt_config) {
   }
 
   if (jQuery('thead > tr', $target_table).size() && ! jQuery('tbody', $target_table).find('[rowspan], [colspan]').length) {
+    $target_table.attr('width', '100%');
     $target_table.DataTable(dt_config);
   }
 
 }
 
+if (   'plugin'     in JSINFO
+    && 'datatables' in JSINFO.plugin) {
 
-if (JSINFO.plugin.datatables.enableForAllTables) {
+  if (JSINFO.plugin.datatables.enableForAllTables) {
 
-  jQuery(ALL_TABLES_SELECTOR).each(function() {
+    jQuery(ALL_TABLES_SELECTOR).each(function() {
 
-    var $target_table = jQuery(this).parent();
+      var $target_table = jQuery(this).parent();
 
-    if (! $target_table.parents('.dt-wrapper').length) {
-      init_datatables($target_table, JSINFO.plugin.datatables.config);
-    }
+      if (! $target_table.parents('.dt-wrapper').length) {
+        init_datatables($target_table, JSINFO.plugin.datatables.config);
+      }
 
-  });
+    });
 
-}
+  }
 
 
-if ($wrap_tables.length) {
+  if ($wrap_tables.length) {
 
-  $wrap_tables.each(function() {
+    $wrap_tables.each(function() {
 
-    var $target_table = jQuery(this),
-        wrap_config   = jQuery(this).parents('.dt-wrapper').data(),
-        dt_config     = jQuery.extend(wrap_config, JSINFO.plugin.datatables.config);
+      var $target_table = jQuery(this),
+          wrap_config   = jQuery(this).parents('.dt-wrapper').data(),
+          dt_config     = jQuery.extend(wrap_config, JSINFO.plugin.datatables.config);
 
-    init_datatables($target_table, dt_config);
+      init_datatables($target_table, dt_config);
 
-  });
+    });
+
+  }
 
 }
 
