@@ -7,4 +7,3 @@
 
 $meta['excludedPages']      = array('regex');
 $meta['enableForAllTables'] = array('onoff');
-$meta['enableLocalization'] = array('onoff');

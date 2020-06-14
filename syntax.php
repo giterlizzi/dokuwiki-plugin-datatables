@@ -1,7 +1,7 @@
 <?php
 /**
  * DataTables plugin: Add DataTables support to DokuWiki
- * 
+ *
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author     Giuseppe Di Terlizzi <giuseppe.diterlizzi@gmail.com>
  * @copyright  (C) 2015-2016, Giuseppe Di Terlizzi
@@ -57,9 +57,9 @@ class syntax_plugin_datatables extends DokuWiki_Syntax_Plugin {
         if (! is_object($xml)) {
 
           $xml = simplexml_load_string('<foo />');
-  
+
           global $ACT;
-  
+
           if ($ACT == 'preview') {
             msg(sprintf('<strong>DataTable Plugin</strong> - Malformed tag (<code>%s</code>). Please check your code!', hsc($match)), -1);
           }

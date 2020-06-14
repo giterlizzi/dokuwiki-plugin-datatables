@@ -6,6 +6,5 @@
  */
 
 
-$conf['excludedPages']      = '(wiki|playground)';
+$conf['excludedPages']      = '(wiki)';
 $conf['enableForAllTables'] = 0;
-$conf['enableLocalization'] = 0;
