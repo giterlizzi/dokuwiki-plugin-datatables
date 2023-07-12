@@ -73,7 +73,7 @@ jQuery(document).ready(function () {
 
                 var $target_table = jQuery(this),
                     wrap_config = jQuery(this).parents('.dt-wrapper').data(),
-                    dt_config = jQuery.extend(wrap_config, JSINFO.plugin.datatables.config);
+                    dt_config = jQuery.extend(JSINFO.plugin.datatables.config, wrap_config);
 
                 init_datatables($target_table, dt_config);
 

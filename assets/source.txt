@@ -11,3 +11,5 @@ Included libraries:
   * FixedColumns 4.3.0
   * FixedHeader 3.4.0
 
+The i18n data has been extracted from
+https://github.com/DataTables/Plugins/releases/tag/1.13.5
