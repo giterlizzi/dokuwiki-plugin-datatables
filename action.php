@@ -142,27 +142,22 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin
         $dt_scripts[] = "$base_url/datatables.net-buttons/js/buttons.html5.min.js";
         $dt_scripts[] = "$base_url/datatables.net-buttons/js/buttons.print.min.js";
 
-        $dt_scripts[] = "$base_url/jszip/dist/jszip.min.js";
-        $dt_scripts[] = "$base_url/pdfmake/build/pdfmake.min.js";
-        $dt_scripts[] = "$base_url/pdfmake/build/vfs_fonts.js";
+        $dt_scripts[] = "$base_url/jszip/jszip.min.js";
+        $dt_scripts[] = "$base_url/pdfmake/pdfmake.min.js";
+        $dt_scripts[] = "$base_url/pdfmake/vfs_fonts.js";
 
         switch ($conf['template']) {
-
             case 'bootstrap3':
-
-                $dt_scripts[] = "$base_url/datatables.net-bs/js/dataTables.bootstrap.min.js";
-                $dt_styles[]  = "$base_url/datatables.net-bs/css/dataTables.bootstrap.min.css";
-
-                //$dt_scripts[] = "$base_url/datatables.net-responsive-bs/js/responsive.bootstrap.min.js";
-                //$dt_syles[] = "$base_url/datatables.net-responsive-bs/css/responsive.bootstrap.min.css";
-
-                $dt_scripts[] = "$base_url/datatables.net-buttons-bs/js/buttons.bootstrap.min.js";
-                $dt_styes[]   = "$base_url/datatables.net-buttons-bs/css/buttons.bootstrap.min.css";
-
+                $dt_scripts[] = "$base_url/datatables.net/js/dataTables.bootstrap.min.js";
+                $dt_styles[]  = "$base_url/datatables.net/css/dataTables.bootstrap.min.css";
+                $dt_scripts[] = "$base_url/datatables.net-buttons/js/buttons.bootstrap.min.js";
+                $dt_styles[]  = "$base_url/datatables.net-buttons/css/buttons.bootstrap.min.css";
                 break;
-
             default:
-                //$dt_scripts[] = "$base_url/datatables.net-responsive/js/dataTables.responsive.min.js";
+                $dt_scripts[] = "$base_url/datatables.net/js/dataTables.jqueryui.min.js";
+                $dt_styles[]  = "$base_url/datatables.net/css/dataTables.jqueryui.min.css";
+                $dt_scripts[] = "$base_url/datatables.net-buttons/js/buttons.jqueryui.min.js";
+                $dt_styles[]  = "$base_url/datatables.net-buttons/css/buttons.jqueryui.min.css";
         }
 
         foreach ($dt_scripts as $script) {

@@ -1,0 +1,13 @@
+To rebuild or modify this file with the latest versions of the included software please visit:
+https://datatables.net/download/#ju/jszip-3.10.1/pdfmake-0.2.7/dt-1.13.5/b-2.4.1/b-html5-2.4.1/b-print-2.4.1/fc-4.3.0/fh-3.4.0
+
+Included libraries:
+  * JSZip 3.10.1
+  * pdfmake 0.2.7
+  * DataTables 1.13.5
+  * Buttons 2.4.1
+  * HTML5 export 2.4.1
+  * Print view 2.4.1
+  * FixedColumns 4.3.0
+  * FixedHeader 3.4.0
+
