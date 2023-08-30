@@ -130,7 +130,7 @@ class action_plugin_datatables extends DokuWiki_Action_Plugin
     protected function getLangPath()
     {
         global $conf;
-        [$lang, $dialect] = sexplode('-', $conf['lang'], 2);
+        [$lang, $dialect] = explode('-', $conf['lang'], 2);
         $dialect = strtoupper($dialect);
 
         // exact match with dialect
